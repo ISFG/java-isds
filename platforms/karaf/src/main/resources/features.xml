@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.2.0" name='javaisds-${project.version}'>
 
-  <feature name='isds' version='${project.version}' resolver='(obr)'>
-    <bundle dependency="true">mvn:org.bouncycastle/bcprov-jdk15on/${bouncycastle-version}</bundle>
-    <bundle dependency="true">mvn:org.bouncycastle/bcpkix-jdk15on/${bouncycastle-version}</bundle>
-    <bundle>mvn:${project.groupId}/isds-common/${project.version}</bundle>
-    <bundle>mvn:${project.groupId}/isds-web-services/${project.version}</bundle>
-    <bundle>mvn:${project.groupId}/isds/${project.version}</bundle>
-  </feature>
+    <feature name='isds' version='${project.version}' resolver='(obr)'>
+        <bundle dependency="true">mvn:org.bouncycastle/bcprov-jdk15on/${bouncycastle-version}</bundle>
+        <bundle dependency="true">mvn:org.bouncycastle/bcpkix-jdk15on/${bouncycastle-version}</bundle>
+        <bundle>mvn:${project.groupId}/isds-common/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/isds-web-services/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/isds/${project.version}</bundle>
+    </feature>
 
 </features>

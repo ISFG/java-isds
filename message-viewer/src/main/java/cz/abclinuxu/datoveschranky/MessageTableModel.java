@@ -3,15 +3,15 @@ package cz.abclinuxu.datoveschranky;
 import cz.abclinuxu.datoveschranky.common.entities.DocumentIdent;
 import cz.abclinuxu.datoveschranky.common.entities.Message;
 import cz.abclinuxu.datoveschranky.common.entities.MessageEnvelope;
+
+import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
 
 /**
- *
  * @author xrosecky
  */
 public class MessageTableModel extends AbstractTableModel {

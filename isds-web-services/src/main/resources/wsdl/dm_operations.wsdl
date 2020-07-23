@@ -1,5 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!--  *********************************************************************
+
+   verze: 2.31
+   klasifikace: Veřejný dokument    
+
      WSDL pro služby
         1. Vytvoření/odeslání datové zprávy - CreateMessage
         2. stažení kompletní přijaté zprávy v čitelné podobě - MessageDownload
@@ -7,9 +11,8 @@
         4. stažení podepsané odeslané zprávy - SignedSentMessageDownload
         5. vytvoření hromadné zprávy (oběžníku) - CreateMultipleMessage   
         6. ověření zprávy - AuthenticateMessage 
+        7. přepodepsání zprávy či doručenky - Re-signISDSDocument
      
-                         verze 2.16  
-
    Změny:  
      4.2.2009 verze 0.1
     20.3.2009 verze 1.0  - formální úpravy vyhovující WS-I Basic Profile
@@ -20,6 +23,13 @@
     1.11.2009 verze 2.6  - komerční provoz
     14.4.2010 verze 2.9  - přidána WS AuthenticateMessage                              
     18.9.2010 verze 2.10 - změna URL v důsledku přechodu na Basic autentizaci
+    27.6.2012 verze 2.17 - přidána WS Re-signISDSDocument
+    18.9.2015 verze 2.21 - sjednocení verzí 
+    14.10.2015 verze 2.22 - sjednocení verzí
+    31.1.2017 verze 2.26  - sjednocení verzí
+    21.11.2017 verze 2.27 - sjednocení verzí
+    2.9.2018 verze 2.30 - sjednocení verzí
+    4.9.2018 verze 2.31 - sjednocení verzí
 ************************************************************************ -->
 
 <definitions name="ISDS_dmOperations" targetNamespace="http://isds.czechpoint.cz/v20" 
@@ -81,6 +91,13 @@
     <part name="parameter" element="tns:AuthenticateMessageResponse" />        
   </message>
 
+  <message name="Re-signISDSDocumentRequest">
+    <part name="parameter" element="tns:Re-signISDSDocument" />        
+  </message>
+  <message name="Re-signISDSDocumentResponse">
+    <part name="parameter" element="tns:Re-signISDSDocumentResponse" />        
+  </message>
+
   <!-- ******************************************************************* -->
   <portType name="dmOperationsPortType">
 
@@ -116,6 +133,11 @@
     <operation name="AuthenticateMessage">
       <input message="tns:AuthenticateMessageRequest"/>
       <output message="tns:AuthenticateMessageResponse"/>
+    </operation>
+
+    <operation name="Re-signISDSDocument">
+      <input message="tns:Re-signISDSDocumentRequest"/>
+      <output message="tns:Re-signISDSDocumentResponse"/>
     </operation>
 
   </portType>
@@ -182,6 +204,16 @@
     </operation>
 
     <operation name="AuthenticateMessage">
+      <soap:operation soapAction=""  />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output >
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+    <operation name="Re-signISDSDocument">
       <soap:operation soapAction=""  />
       <input>
         <soap:body use="literal" />

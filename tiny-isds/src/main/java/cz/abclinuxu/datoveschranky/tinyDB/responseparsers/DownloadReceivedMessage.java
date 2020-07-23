@@ -1,23 +1,22 @@
 package cz.abclinuxu.datoveschranky.tinyDB.responseparsers;
 
-import cz.abclinuxu.datoveschranky.common.interfaces.AttachmentStorer;
 import cz.abclinuxu.datoveschranky.common.Utils;
-import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
-import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputStreamHolder;
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
 import cz.abclinuxu.datoveschranky.common.entities.MessageEnvelope;
+import cz.abclinuxu.datoveschranky.common.interfaces.AttachmentStorer;
+import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
+import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputStreamHolder;
+import org.apache.commons.codec.binary.Base64OutputStream;
+import org.xml.sax.Attributes;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.codec.binary.Base64OutputStream;
-import org.xml.sax.Attributes;
 
 /**
- * 
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
- * 
  */
 public class DownloadReceivedMessage extends AbstractResponseParser {
 
@@ -25,7 +24,7 @@ public class DownloadReceivedMessage extends AbstractResponseParser {
     private List<Attachment> attachments = new ArrayList<Attachment>();
     private AttachmentStorer storer = null;
     private MessageEnvelope envelope = null;
-    
+
     public DownloadReceivedMessage(MessageEnvelope env, AttachmentStorer attachStorer) {
         this.envelope = env;
         this.storer = attachStorer;
@@ -61,7 +60,7 @@ public class DownloadReceivedMessage extends AbstractResponseParser {
             Utils.close((Closeable) handle);
         }
     }
-    
+
     public List<Attachment> getResult() {
         return attachments;
     }

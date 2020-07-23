@@ -1,8 +1,12 @@
 package cz.abclinuxu.datoveschranky;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import cz.abclinuxu.datoveschranky.common.ByteArrayAttachmentStorer;
+import cz.abclinuxu.datoveschranky.common.Config;
+import cz.abclinuxu.datoveschranky.common.DataBoxEnvironment;
+import cz.abclinuxu.datoveschranky.common.entities.Message;
+import cz.abclinuxu.datoveschranky.common.entities.content.FileContent;
+import cz.abclinuxu.datoveschranky.common.interfaces.AttachmentStorer;
+import cz.abclinuxu.datoveschranky.impl.MessageValidator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,13 +16,8 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Scanner;
 
-import cz.abclinuxu.datoveschranky.common.entities.Message;
-import cz.abclinuxu.datoveschranky.common.entities.content.FileContent;
-import cz.abclinuxu.datoveschranky.common.ByteArrayAttachmentStorer;
-import cz.abclinuxu.datoveschranky.common.Config;
-import cz.abclinuxu.datoveschranky.common.DataBoxEnvironment;
-import cz.abclinuxu.datoveschranky.common.interfaces.AttachmentStorer;
-import cz.abclinuxu.datoveschranky.impl.MessageValidator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Created by jludvice on 6.10.16.
@@ -46,7 +45,8 @@ public class ZFOTest {
         Message m = validator.validateAndCreateMessage(fc, ats);
 
         System.out.println("Extracted message from zfo file: " + m);
-        assertEquals("Message must have correct subject", "Test Message OVM -_ FO Fri Sep 30 17:45:42 CEST 2016", m.getEnvelope().getAnnotation());
+        assertEquals("Message must have correct subject", "Test Message OVM -_ FO Fri Sep 30 17:45:42 CEST 2016",
+            m.getEnvelope().getAnnotation());
         assertEquals("Message must have 2 attachments", 1, m.getAttachments().size());
 
         InputStream is = null;

@@ -1,9 +1,10 @@
 package cz.abclinuxu.datoveschranky;
 
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
+
+import javax.swing.table.AbstractTableModel;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
 
 public class AttachmentTableModel extends AbstractTableModel {
 

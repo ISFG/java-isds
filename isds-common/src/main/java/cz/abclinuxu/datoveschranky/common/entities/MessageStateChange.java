@@ -3,7 +3,6 @@ package cz.abclinuxu.datoveschranky.common.entities;
 import java.util.GregorianCalendar;
 
 /**
- *
  * @author xrosecky
  */
 public class MessageStateChange {
@@ -13,27 +12,27 @@ public class MessageStateChange {
     private MessageState state = null;
 
     public GregorianCalendar getEventTime() {
-	return eventTime;
+        return eventTime;
     }
 
     public void setEventTime(GregorianCalendar eventTime) {
-	this.eventTime = eventTime;
+        this.eventTime = eventTime;
     }
 
     public String getMessageId() {
-	return messageId;
+        return messageId;
     }
 
     public void setMessageId(String messageId) {
-	this.messageId = messageId;
+        this.messageId = messageId;
     }
 
     public MessageState getState() {
-	return state;
+        return state;
     }
 
     public void setState(MessageState state) {
-	this.state = state;
+        this.state = state;
     }
 
 }

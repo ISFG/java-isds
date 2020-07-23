@@ -3,9 +3,8 @@ package cz.abclinuxu.datoveschranky.common.entities;
 import java.util.GregorianCalendar;
 
 /**
- *
  * Reprezentuje jednu událost doručenky.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class DeliveryEvent {
@@ -20,7 +19,7 @@ public class DeliveryEvent {
 
     /**
      * Popis události
-     */ 
+     */
     public String getDescription() {
         return description;
     }
@@ -31,7 +30,6 @@ public class DeliveryEvent {
 
     /**
      * Čas, kdy tato událost nastala.
-     * 
      */
     public GregorianCalendar getTime() {
         return time;
@@ -39,6 +37,6 @@ public class DeliveryEvent {
 
     public void setTime(GregorianCalendar time) {
         this.time = time;
-    }  
+    }
 
 }

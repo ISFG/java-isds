@@ -1,5 +1,7 @@
 package cz.abclinuxu.datoveschranky;
 
+import cz.abclinuxu.datoveschranky.common.ByteArrayAttachmentStorer;
+import cz.abclinuxu.datoveschranky.common.Config;
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
 import cz.abclinuxu.datoveschranky.common.entities.DataBox;
 import cz.abclinuxu.datoveschranky.common.entities.DataBoxState;
@@ -11,13 +13,12 @@ import cz.abclinuxu.datoveschranky.common.entities.MessageEnvelope;
 import cz.abclinuxu.datoveschranky.common.entities.TimeStamp;
 import cz.abclinuxu.datoveschranky.common.entities.content.ByteContent;
 import cz.abclinuxu.datoveschranky.common.entities.content.Content;
-import cz.abclinuxu.datoveschranky.common.ByteArrayAttachmentStorer;
-import cz.abclinuxu.datoveschranky.common.Config;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxDownloadService;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxMessagesService;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxUploadService;
 import cz.abclinuxu.datoveschranky.impl.DataBoxManager;
 import cz.abclinuxu.datoveschranky.impl.MessageValidator;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +26,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class Main {
@@ -40,15 +40,15 @@ public class Main {
             DataBoxState dbs = services.getDataBoxSearchService().checkDataBox(entity);
             System.out.println(entity + " " + dbs);
         }
-        
+
         DataBoxMessagesService messagesService = services.getDataBoxMessagesService();
         DataBoxDownloadService downloadService = services.getDataBoxDownloadService();
         DataBoxUploadService uploadService = services.getDataBoxUploadService();
-        
+
         MessageEnvelope env = new MessageEnvelope();
         env.setRecipient(new DataBox("vqbab52"));
         env.setAnnotation("predmet zpravy");
-        List<Attachment> attachments = new ArrayList<Attachment>();
+        List<Attachment> attachments = new ArrayList<>();
         Attachment attach1 = new Attachment();
         attach1.setDescription("StandardText.txt");
         attach1.setMetaType("main");
@@ -57,12 +57,11 @@ public class Main {
         attachments.add(attach1);
         Message message = new Message(env, null, null, attachments);
         uploadService.sendMessage(message);
-        System.out.println("The messageID is "+message.getEnvelope().getMessageID());
+        System.out.println("The messageID is " + message.getEnvelope().getMessageID());
         GregorianCalendar begin = new GregorianCalendar();
         begin.roll(Calendar.DAY_OF_YEAR, -28);
         GregorianCalendar end = new GregorianCalendar();
         end.roll(Calendar.DAY_OF_YEAR, 1);
-        // List<MessageEnvelope> messages = messagesService.getListOfReceivedMessages(begin, end, null, 0, 5);
         List<MessageEnvelope> messages = messagesService.getListOfSentMessages(begin.getTime(), end.getTime(), null, 0, 5);
         MessageValidator helper = new MessageValidator(config);
         for (MessageEnvelope envelope : messages) {
@@ -77,7 +76,7 @@ public class Main {
             System.err.println("        hash:" + stamp.getHash());
             System.err.println("        signed by:" + stamp.getCertificate().getIssuerDN().getName());
             System.err.println("        cert id:" + stamp.getCertificate().getSerialNumber());
-            System.err.println("        status:"+mess.getEnvelope().getState().toString());
+            System.err.println("        status:" + mess.getEnvelope().getState().toString());
         }
     }
 

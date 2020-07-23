@@ -6,7 +6,6 @@
 package cz.abclinuxu.datoveschranky.common.entities;
 
 /**
- *
  * @author xrosecky
  */
 public class Address {

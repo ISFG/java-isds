@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 /**
  * Obsah přílohy uložený v souboru.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class FileContent implements Content {
@@ -17,7 +17,7 @@ public class FileContent implements Content {
     public FileContent(File file) {
         this.file = file;
     }
-    
+
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(file);
     }
@@ -26,7 +26,7 @@ public class FileContent implements Content {
         return file.length();
     }
 
-    public File getFile(){
+    public File getFile() {
         return file;
     }
 

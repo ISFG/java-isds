@@ -4,9 +4,8 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 
 /**
- *
  * Časové razítko zprávy, třída je neměnná.
- * 
+ *
  * @author xrosecky
  */
 public class TimeStamp {
@@ -40,5 +39,5 @@ public class TimeStamp {
     public Hash getHash() {
         return hash;
     }
-    
+
 }

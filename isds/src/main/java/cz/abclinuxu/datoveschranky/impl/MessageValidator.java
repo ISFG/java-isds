@@ -1,5 +1,8 @@
 package cz.abclinuxu.datoveschranky.impl;
 
+import cz.abclinuxu.datoveschranky.common.Config;
+import cz.abclinuxu.datoveschranky.common.DataBoxException;
+import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
 import cz.abclinuxu.datoveschranky.common.entities.DataBox;
 import cz.abclinuxu.datoveschranky.common.entities.DeliveryEvent;
@@ -12,9 +15,6 @@ import cz.abclinuxu.datoveschranky.common.entities.MessageState;
 import cz.abclinuxu.datoveschranky.common.entities.MessageType;
 import cz.abclinuxu.datoveschranky.common.entities.TimeStamp;
 import cz.abclinuxu.datoveschranky.common.entities.content.Content;
-import cz.abclinuxu.datoveschranky.common.Config;
-import cz.abclinuxu.datoveschranky.common.DataBoxException;
-import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.interfaces.AttachmentStorer;
 import cz.abclinuxu.datoveschranky.ws.dm.TDelivery;
 import cz.abclinuxu.datoveschranky.ws.dm.TDeliveryMessageOutput;
@@ -23,18 +23,12 @@ import cz.abclinuxu.datoveschranky.ws.dm.TFilesArray.DmFile;
 import cz.abclinuxu.datoveschranky.ws.dm.TMessDownOutput;
 import cz.abclinuxu.datoveschranky.ws.dm.TReturnedMessage;
 import cz.abclinuxu.datoveschranky.ws.dm.TReturnedMessage.DmDm;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -50,13 +44,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLFilterImpl;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Třída pro práci s podepsanými zprávami, umožňuje ověření podpisu a časového
@@ -77,104 +75,11 @@ public class MessageValidator {
     private Validator validator;
 
     public MessageValidator() {
-        this.validator = new Validator();
+        validator = new Validator();
     }
 
     public MessageValidator(Config config) {
-        this.validator = new Validator(Utils.getX509Certificates(config.getKeyStore()), false);
-    }
-
-    /**
-     * Wrapper nad metodou {@link MessageValidator#validateAndCreateMessage(byte[], AttachmentStorer, boolean)}.
-     *
-     * @param content PKCS podepsany obsah
-     * @param storer uloziste pro prilohy
-     * @return instance zpravy ze zfo souboru
-     * @throws IOException
-     */
-    public Message validateAndCreateMessage(Content content, AttachmentStorer storer) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        Utils.copy(content.getInputStream(), bos);
-        return this.validateAndCreateMessage(bos.toByteArray(), storer, true);
-    }
-
-    public Message createMessage(Content content, AttachmentStorer storer) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        Utils.copy(content.getInputStream(), bos);
-        return this.validateAndCreateMessage(bos.toByteArray(), storer, false);
-    }
-
-    public Message createMessage(byte[] content, AttachmentStorer storer) throws IOException {
-        return this.validateAndCreateMessage(content, storer, false);
-    }
-
-    /**
-     * Na vstup dostane podepsanou zprávu v binárním formátu PKCS#7 (žádné XML),
-     * a vrátí zprávu včetně příloh při splnění následujících podmínek:
-     * <p>
-     * - zpráva je podepsaná platným certifikátem
-     * - časové razítko je podepsané platným certifikátem
-     * - haš časového razítka a haš zprávy (element dmHash) jsou totožné a
-     *   souhlasí se spočítaným hašem ze zprávy způsobem definovaným
-     *   v dokumentaci k ISDS.
-     * <p>
-     * Validace zpráv probíha proti certifikátům, které jsou předány při
-     * volání konstruktoru této třídy, ne proti přiloženým certifikátům k
-     * časovému razítku či podpisu zprávy.
-     * <p>
-     * Pokud zpráva nesplnuje výše uvedené podmínky, je vyhozena vyjímka
-     * DataBoxException s detailním popisem chyby.
-     *
-     * @param asPKCS7 zpráva v obalu PKCS#7
-     * @return zpráva včetně příloh
-     * @throws DataBoxException při neúspěšné validaci
-     */
-    public Message validateAndCreateMessage(byte[] asPKCS7, AttachmentStorer storer, boolean checkHash) throws DataBoxException {
-        byte[] asXML = validator.readPKCS7(asPKCS7);
-        MarshallerResult result = null;
-        try {
-            result = load(TMessDownOutput.class, asXML);
-        } catch (Exception ex) {
-            throw new DataBoxException("Nemohu demarsalovat zpravu", ex);
-        }
-        TMessDownOutput out = (TMessDownOutput) ((JAXBElement) result.value).getValue();
-        TReturnedMessage tMessage = out.getDmReturnedMessage().getValue();
-        MessageEnvelope envelope = null;
-        if (result.rootUri.endsWith("/v20/SentMessage")) {
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.SENT);
-        } else if (result.rootUri.endsWith("/v20/message")) {
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.RECEIVED);
-        } else {
-            logger.log(Level.SEVERE, String.format("Neplatny namespace '%s' u zpravy.",
-                    result.rootUri));
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.CREATED);
-        }
-        Message message = buildMessage(envelope, tMessage, storer);
-        Hash messageHash = new Hash(tMessage.getDmHash().getAlgorithm(), tMessage.getDmHash().getValue());
-        if (checkHash) {
-            Hash rightHash = computeMessageHash(asXML, message.getTimeStamp().getHash().getAlgorithm());
-            if (!rightHash.equals(message.getTimeStamp().getHash())) {
-                throw new DataBoxException("Poruseni integrity zpravy, spocitany has zpravy "
-                        + "nen roven hasi uvedenemu v casovem razitku.");
-            }
-            if (!rightHash.equals(messageHash)) {
-                throw new DataBoxException("Poruseni integrity zpravy, spocitany hash zpravy "
-                        + "nen roven hasi uvedenemu ve zprave.");
-            }
-        }
-        return message;
-    }
-
-    public DeliveryInfo createDeliveryInfo(byte[] asPCKS7) {
-        byte[] asXML = validator.readPKCS7(asPCKS7);
-        MarshallerResult result = null;
-        try {
-            result = load(TDeliveryMessageOutput.class, asXML);
-        } catch (Exception ex) {
-            throw new DataBoxException("Nemohu demarsalovat zpravu", ex);
-        }
-        TDeliveryMessageOutput delivery = (TDeliveryMessageOutput) ((JAXBElement) result.value).getValue();
-        return MessageValidator.buildDeliveryInfo(delivery.getDmDelivery().getValue());
+        validator = new Validator();
     }
 
     /**
@@ -228,13 +133,135 @@ public class MessageValidator {
         if (env != null) {
             result.setMessageEnvelope(env);
         }
-        List<DeliveryEvent> events = new ArrayList<DeliveryEvent>();
+        List<DeliveryEvent> events = new ArrayList<>();
         for (TEvent tEvent : delivery.getDmEvents().getDmEvent()) {
             DeliveryEvent event = new DeliveryEvent(tEvent.getDmEventTime().toGregorianCalendar(), tEvent.getDmEventDescr());
             events.add(event);
         }
         result.setEvents(events);
         return result;
+    }
+
+    private static <E> MarshallerResult load(Class<E> clazz, byte[] what) throws Exception {
+        JAXBContext context = JAXBContext.newInstance(clazz);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        SAXParserFactory SAXfactory = SAXParserFactory.newInstance();
+        XMLReader reader = SAXfactory.newSAXParser().getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        DBMessageXMLFilter xmlFilter = new DBMessageXMLFilter(reader);
+        reader.setContentHandler(unmarshaller.getUnmarshallerHandler());
+        SAXSource source = new SAXSource(xmlFilter, new InputSource(new ByteArrayInputStream(what)));
+        return new MarshallerResult(unmarshaller.unmarshal(source), xmlFilter.rootURI);
+    }
+
+    protected static byte[] toByteArray(Element element) {
+        try {
+            Source source = new DOMSource(element);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Result result = new StreamResult(out);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer;
+            transformer = factory.newTransformer();
+            transformer.transform(source, result);
+            return out.toByteArray();
+        } catch (TransformerConfigurationException tce) {
+            throw new RuntimeException(tce);
+        } catch (TransformerException te) {
+            throw new RuntimeException(te);
+        }
+    }
+
+    /**
+     * Wrapper nad metodou {@link MessageValidator#validateAndCreateMessage(byte[], AttachmentStorer, boolean)}.
+     *
+     * @param content PKCS podepsany obsah
+     * @param storer  uloziste pro prilohy
+     * @return instance zpravy ze zfo souboru
+     * @throws IOException
+     */
+    public Message validateAndCreateMessage(Content content, AttachmentStorer storer) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Utils.copy(content.getInputStream(), bos);
+        return validateAndCreateMessage(bos.toByteArray(), storer, true);
+    }
+
+    public Message createMessage(Content content, AttachmentStorer storer) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Utils.copy(content.getInputStream(), bos);
+        return validateAndCreateMessage(bos.toByteArray(), storer, false);
+    }
+
+    public Message createMessage(byte[] content, AttachmentStorer storer) throws IOException {
+        return validateAndCreateMessage(content, storer, false);
+    }
+
+    /**
+     * Na vstup dostane podepsanou zprávu v binárním formátu PKCS#7 (žádné XML),
+     * a vrátí zprávu včetně příloh při splnění následujících podmínek:
+     * <p>
+     * - zpráva je podepsaná platným certifikátem
+     * - časové razítko je podepsané platným certifikátem
+     * - haš časového razítka a haš zprávy (element dmHash) jsou totožné a
+     * souhlasí se spočítaným hašem ze zprávy způsobem definovaným
+     * v dokumentaci k ISDS.
+     * <p>
+     * Validace zpráv probíha proti certifikátům, které jsou předány při
+     * volání konstruktoru této třídy, ne proti přiloženým certifikátům k
+     * časovému razítku či podpisu zprávy.
+     * <p>
+     * Pokud zpráva nesplnuje výše uvedené podmínky, je vyhozena vyjímka
+     * DataBoxException s detailním popisem chyby.
+     *
+     * @param asPKCS7 zpráva v obalu PKCS#7
+     * @return zpráva včetně příloh
+     * @throws DataBoxException při neúspěšné validaci
+     */
+    public Message validateAndCreateMessage(byte[] asPKCS7, AttachmentStorer storer, boolean checkHash) throws DataBoxException {
+        byte[] asXML = validator.readPKCS7(asPKCS7);
+        MarshallerResult result = null;
+        try {
+            result = load(TMessDownOutput.class, asXML);
+        } catch (Exception ex) {
+            throw new DataBoxException("Nemohu demarsalovat zpravu", ex);
+        }
+        TMessDownOutput out = (TMessDownOutput) ((JAXBElement) result.value).getValue();
+        TReturnedMessage tMessage = out.getDmReturnedMessage().getValue();
+        MessageEnvelope envelope = null;
+        if (result.rootUri.endsWith("/v20/SentMessage")) {
+            envelope = buildMessageEnvelope(tMessage, MessageType.SENT);
+        } else if (result.rootUri.endsWith("/v20/message")) {
+            envelope = buildMessageEnvelope(tMessage, MessageType.RECEIVED);
+        } else {
+            logger.log(Level.SEVERE, String.format("Neplatny namespace '%s' u zpravy.",
+                result.rootUri));
+            envelope = buildMessageEnvelope(tMessage, MessageType.CREATED);
+        }
+        Message message = buildMessage(envelope, tMessage, storer);
+        Hash messageHash = new Hash(tMessage.getDmHash().getAlgorithm(), tMessage.getDmHash().getValue());
+        if (checkHash) {
+            Hash rightHash = computeMessageHash(asXML, message.getTimeStamp().getHash().getAlgorithm());
+            if (!rightHash.equals(message.getTimeStamp().getHash())) {
+                throw new DataBoxException("Poruseni integrity zpravy, spocitany has zpravy "
+                    + "nen roven hasi uvedenemu v casovem razitku.");
+            }
+            if (!rightHash.equals(messageHash)) {
+                throw new DataBoxException("Poruseni integrity zpravy, spocitany hash zpravy "
+                    + "nen roven hasi uvedenemu ve zprave.");
+            }
+        }
+        return message;
+    }
+
+    public DeliveryInfo createDeliveryInfo(byte[] asPCKS7) {
+        byte[] asXML = validator.readPKCS7(asPCKS7);
+        MarshallerResult result = null;
+        try {
+            result = load(TDeliveryMessageOutput.class, asXML);
+        } catch (Exception ex) {
+            throw new DataBoxException("Nemohu demarsalovat zpravu", ex);
+        }
+        TDeliveryMessageOutput delivery = (TDeliveryMessageOutput) ((JAXBElement) result.value).getValue();
+        return MessageValidator.buildDeliveryInfo(delivery.getDmDelivery().getValue());
     }
 
     MessageEnvelope buildMessageEnvelope(TReturnedMessage message, MessageType type) {
@@ -287,7 +314,7 @@ public class MessageValidator {
         // doplnit obalku daty z prijate zpravy
         buildMessage(message.getDmDm(), envelope);
 
-        List<Attachment> attachments = new ArrayList<Attachment>();
+        List<Attachment> attachments = new ArrayList<>();
         for (DmFile file : message.getDmDm().getDmFiles().getDmFile()) {
             Attachment attachment = new Attachment();
             attachment.setDescription(file.getDmFileDescr());
@@ -303,9 +330,9 @@ public class MessageValidator {
                         os.write(toByteArray(file.getDmXMLContent().getAny()));
                     } else {
                         throw new IllegalArgumentException(
-                                "both file.getDmEncodedContent() "
-                                        + "and file.getDmXMLContent() are null, messageId is "
-                                        + envelope.getMessageID());
+                            "both file.getDmEncodedContent() "
+                                + "and file.getDmXMLContent() are null, messageId is "
+                                + envelope.getMessageID());
                     }
                 } finally {
                     if (os != null) {
@@ -321,35 +348,14 @@ public class MessageValidator {
         return new Message(envelope, ts, null, attachments);
     }
 
-    public Message readZFO(byte[] input, AttachmentStorer storer) {
-        MarshallerResult result = null;
-        try {
-            result = load(TMessDownOutput.class, input);
-        } catch (Exception ex) {
-            throw new DataBoxException("Nemohu demarsalovat zpravu", ex);
-        }
-        TMessDownOutput out = (TMessDownOutput) ((JAXBElement) result.value).getValue();
-        TReturnedMessage tMessage = out.getDmReturnedMessage().getValue();
-        MessageEnvelope envelope = null;
-        if (result.rootUri.endsWith("/v20/SentMessage")) {
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.SENT);
-        } else if (result.rootUri.endsWith("/v20/message")) {
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.RECEIVED);
-        } else {
-            envelope = this.buildMessageEnvelope(tMessage, MessageType.CREATED);
-        }
-        Message message = this.buildMessage(envelope, tMessage, storer);
-        return message;
-    }
-
     private static class MarshallerResult {
 
         public Object value;
         public String rootUri;
 
         public MarshallerResult(Object val, String uri) {
-            this.value = val;
-            this.rootUri = uri;
+            value = val;
+            rootUri = uri;
         }
     }
 
@@ -366,40 +372,11 @@ public class MessageValidator {
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes)
-                throws SAXException {
+            throws SAXException {
             if (rootURI == null) {
                 rootURI = uri;
             }
             super.startElement(namespace, localName, localName, attributes);
-        }
-    }
-
-    private static <E> MarshallerResult load(Class<E> clazz, byte[] what) throws Exception {
-        JAXBContext context = JAXBContext.newInstance(clazz);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        SAXParserFactory SAXfactory = SAXParserFactory.newInstance();
-        XMLReader reader = SAXfactory.newSAXParser().getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-        DBMessageXMLFilter xmlFilter = new DBMessageXMLFilter(reader);
-        reader.setContentHandler(unmarshaller.getUnmarshallerHandler());
-        SAXSource source = new SAXSource(xmlFilter, new InputSource(new ByteArrayInputStream(what)));
-        return new MarshallerResult(unmarshaller.unmarshal(source), xmlFilter.rootURI);
-    }
-
-    protected static byte[] toByteArray(Element element) {
-        try {
-            Source source = new DOMSource(element);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Result result = new StreamResult(out);
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer;
-            transformer = factory.newTransformer();
-            transformer.transform(source, result);
-            return out.toByteArray();
-        } catch (TransformerConfigurationException tce) {
-            throw new RuntimeException(tce);
-        } catch (TransformerException te) {
-            throw new RuntimeException(te);
         }
     }
 }

@@ -1,33 +1,22 @@
 package cz.abclinuxu.datoveschranky.tinyDB;
 
-import cz.abclinuxu.datoveschranky.tinyDB.responseparsers.ResponseParser;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
+import cz.abclinuxu.datoveschranky.tinyDB.responseparsers.ResponseParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
 import java.util.Stack;
 
 /**
- * 
  * Nadstavba nad SAX parserem, tohle přijde refaktorovat s třídou ResponsePraser.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class SimpleSAXParser extends DefaultHandler {
 
-    private static class State {
-
-        public String element = null;
-        public OutputHolder handler = null;
-
-        public State(String el, OutputHolder handler) {
-            this.element = el;
-            this.handler = handler;
-        }
-    }
     private Stack<State> path = new Stack<State>();
     private ResponseParser delegate;
-
     public SimpleSAXParser(ResponseParser parser) {
         this.delegate = parser;
     }
@@ -41,10 +30,10 @@ public class SimpleSAXParser extends DefaultHandler {
 
     @Override
     public void characters(char[] array, int start, int length) throws SAXException {
-            OutputHolder handler = this.state().handler;
-            if (handler != null) {
-                handler.write(array, start, length);
-            }
+        OutputHolder handler = this.state().handler;
+        if (handler != null) {
+            handler.write(array, start, length);
+        }
     }
 
     @Override
@@ -61,5 +50,16 @@ public class SimpleSAXParser extends DefaultHandler {
     @Override
     public void endDocument() throws SAXException {
         delegate.done();
+    }
+
+    private static class State {
+
+        public String element = null;
+        public OutputHolder handler = null;
+
+        public State(String el, OutputHolder handler) {
+            this.element = el;
+            this.handler = handler;
+        }
     }
 }

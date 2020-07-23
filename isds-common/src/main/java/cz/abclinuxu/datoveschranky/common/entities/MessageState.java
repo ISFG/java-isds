@@ -37,7 +37,7 @@ public enum MessageState {
             }
         }
         throw new IllegalArgumentException(String.format("Číslo %d není povolený " +
-                "číselný stav zprávy.", val));
+            "číselný stav zprávy.", val));
     }
 
     public static int toInt(EnumSet<MessageState> states) {

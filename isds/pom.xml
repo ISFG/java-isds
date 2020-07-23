@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>java-isds</artifactId>
-    <groupId>cz.abclinuxu.datoveschranky</groupId>
-    <version>1.1.2</version>
-  </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>java-isds</artifactId>
+        <groupId>cz.abclinuxu.datoveschranky</groupId>
+        <version>1.1.2</version>
+    </parent>
 
-  <packaging>bundle</packaging>
-  <artifactId>isds</artifactId>
-  <name>JavaISDS :: JavaISDS</name>
-  <description>Library for accessing ISDS system. Supports sending, downloading, searching and verification.</description>
+    <packaging>bundle</packaging>
+    <artifactId>isds</artifactId>
+    <name>JavaISDS :: JavaISDS</name>
+    <description>Library for accessing ISDS system. Supports sending, downloading, searching and verification.</description>
 
-  <properties>
-    <osgi.import>
-      javax.xml.ws;version="[1.1,3)",
-      ${osgi.import.default}
-    </osgi.import>
+    <properties>
+        <osgi.import>
+            javax.xml.ws;version="[1.1,3)",
+            ${osgi.import.default}
+        </osgi.import>
 
-    <isds.config.path>${project.basedir}/isds-config.properties</isds.config.path>
-  </properties>
+        <isds.config.path>${project.basedir}/isds-config.properties</isds.config.path>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>cz.abclinuxu.datoveschranky</groupId>
-      <artifactId>isds-common</artifactId>
-      <version>1.1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>cz.abclinuxu.datoveschranky</groupId>
-      <artifactId>isds-web-services</artifactId>
-      <version>1.1.2</version>
-    </dependency>
-    <dependency>
-	  <!-- bcpkix transitively depends on bcprov-jdk15on -->
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcpkix-jdk15on</artifactId>
-      <version>${bouncycastle-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <trimStackTrace>false</trimStackTrace>
-          <systemPropertyVariables>
-            <isds.config.path>${isds.config.path}</isds.config.path>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencies>
+        <dependency>
+            <groupId>cz.abclinuxu.datoveschranky</groupId>
+            <artifactId>isds-common</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>cz.abclinuxu.datoveschranky</groupId>
+            <artifactId>isds-web-services</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <!-- bcpkix transitively depends on bcprov-jdk15on -->
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>${bouncycastle-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <isds.config.path>${isds.config.path}</isds.config.path>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

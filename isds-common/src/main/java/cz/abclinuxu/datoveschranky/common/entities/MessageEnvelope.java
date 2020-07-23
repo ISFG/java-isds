@@ -45,7 +45,8 @@ public class MessageEnvelope implements Serializable {
         this.annotation = annotation;
     }
 
-    public MessageEnvelope(MessageType type, DataBox sender, DataBox recipient, String id, String annotation, LegalTitle legalTitle, String toHands, boolean personalDelivery, boolean allowSubstDelivery) {
+    public MessageEnvelope(MessageType type, DataBox sender, DataBox recipient, String id, String annotation, LegalTitle legalTitle,
+                           String toHands, boolean personalDelivery, boolean allowSubstDelivery) {
         this(type, sender, recipient, id, annotation);
         this.legalTitle = legalTitle;
         this.toHands = toHands;

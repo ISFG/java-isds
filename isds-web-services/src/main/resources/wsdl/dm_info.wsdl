@@ -1,5 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!--  *********************************************************************
+
+   verze: 2.31
+   klasifikace: Veřejný dokument    
+
      WSDL pro služby
         1. Ověření neporušení datové zprávy - VerifyMessage
         2. Stažení obálky přijaté zprávy v čitelné podobě - MessageEnvelopeDownload
@@ -15,8 +19,6 @@
         12. smazání dlouhodbě uložené DZ (trezorové) - EraseMessage 
         
               
-                          verze 2.17 
-
    Změny:  
      4.2.2009 verze 0.1
     20.3.2009 verze 1.0   - formální úpravy vyhovující WS-I Basic Profile   
@@ -27,7 +29,12 @@
                           - přidání WS GetMessageStateChanges
    10.11.2010 verze 2.11  - přidání WS GetMessageAuthor     
    25.8.2010  verze 2.14  - novela zákona 300   
-   12.4.2012  verze 2.16  - přidání WS EraseMessage            
+   12.4.2012  verze 2.16  - přidání WS EraseMessage      
+   14.10.2015 verze 2.22  - sjednocení verzí
+   31.1.2017  verze 2.26  - sjednocení verzí
+   21.11.2017 verze 2.27  - sjednocení verzí
+   2.9.2018 verze 2.30 - sjednocení verzí
+   4.9.2018 verze 2.31 - sjednocení verzí
 ************************************************************************ -->
 
 <definitions name="ISDS_dmMessCreate" targetNamespace="http://isds.czechpoint.cz/v20" 

@@ -4,13 +4,13 @@ import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.entities.Hash;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputStreamHolder;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.xml.sax.Attributes;
 
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+
 /**
- *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class VerifyMessage extends AbstractResponseParser {
@@ -37,9 +37,9 @@ public class VerifyMessage extends AbstractResponseParser {
             Utils.close((Closeable) holder);
         }
     }
-    
+
     public Hash getResult() {
         return new Hash(algorithm, hash.toByteArray());
     }
-    
+
 }

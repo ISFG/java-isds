@@ -1,18 +1,18 @@
 package cz.abclinuxu.datoveschranky.tinyDB.responseparsers;
 
+import cz.abclinuxu.datoveschranky.common.entities.DataBox;
 import cz.abclinuxu.datoveschranky.common.entities.MessageEnvelope;
+import cz.abclinuxu.datoveschranky.common.entities.MessageType;
 import cz.abclinuxu.datoveschranky.tinyDB.XMLUtils;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.StringHolder;
-import cz.abclinuxu.datoveschranky.common.entities.DataBox;
-import cz.abclinuxu.datoveschranky.common.entities.MessageType;
+import org.xml.sax.Attributes;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.xml.sax.Attributes;
 
 /**
- *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class GetListOfReceivedMessages extends AbstractResponseParser {

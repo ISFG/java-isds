@@ -1,5 +1,10 @@
 package cz.abclinuxu.datoveschranky;
 
+import cz.abclinuxu.datoveschranky.common.entities.Address;
+import cz.abclinuxu.datoveschranky.common.entities.DataBoxType;
+import cz.abclinuxu.datoveschranky.common.entities.DataBoxWithDetails;
+import cz.abclinuxu.datoveschranky.common.entities.SearchResult;
+import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxServices;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -8,12 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
-
-import cz.abclinuxu.datoveschranky.common.entities.Address;
-import cz.abclinuxu.datoveschranky.common.entities.DataBoxType;
-import cz.abclinuxu.datoveschranky.common.entities.DataBoxWithDetails;
-import cz.abclinuxu.datoveschranky.common.entities.SearchResult;
-import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxServices;
 
 /**
  * @author xrosecky
@@ -51,7 +50,6 @@ public class SearchTest {
             Assert.assertNotNull("City shouldn't be null. " + db, db.getAddressDetails().getCity());
             Assert.assertNotNull("Address shouldn't be null. " + db, db.getAddressDetails().getStreet());
             Assert.assertNotNull("Zip Code shouldn't be null. " + db, db.getAddressDetails().getZipCode());
-            Assert.assertNotNull("State shouldn't be null. " + db, db.getAddressDetails().getState());
         }
         List<DataBoxWithDetails> boxes2 = services.getDataBoxSearchService().findOVMsByName("Ministerstvo nepravdy a lasky");
         Assert.assertTrue("Search result for non existent entry should be empty", boxes2.isEmpty());

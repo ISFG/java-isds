@@ -5,18 +5,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
+ * Doručenka datové zprávy, viz dokumentace k ISDS.
  *
- * Doručenka datové zprávy, viz dokumentace k ISDS. 
- * 
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
-public class DeliveryInfo implements Serializable  {
+public class DeliveryInfo implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 827309450119226032L;
-	protected MessageEnvelope envelope = null;
+     *
+     */
+    private static final long serialVersionUID = 827309450119226032L;
+    protected MessageEnvelope envelope = null;
     protected GregorianCalendar accepted = null;
     protected GregorianCalendar delivered = null;
     protected Hash hash = null;
@@ -27,11 +26,10 @@ public class DeliveryInfo implements Serializable  {
     }
 
     /**
-     *  Čas doručení, je-li zpráva doručena.
-     * 
-     *  @return čas doručení nebo null, není-li zpráva doručena.
-     * 
-     */ 
+     * Čas doručení, je-li zpráva doručena.
+     *
+     * @return čas doručení nebo null, není-li zpráva doručena.
+     */
     public GregorianCalendar getAccepted() {
         return accepted;
     }
@@ -41,8 +39,8 @@ public class DeliveryInfo implements Serializable  {
     }
 
     /**
-     *  Čas dodání
-     * 
+     * Čas dodání
+     *
      * @return čas dodání
      */
     public GregorianCalendar getDelivered() {
@@ -93,7 +91,6 @@ public class DeliveryInfo implements Serializable  {
     public void setEvents(List<DeliveryEvent> events) {
         this.events = events;
     }
-
 
 
 }

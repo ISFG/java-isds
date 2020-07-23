@@ -3,16 +3,17 @@ package cz.abclinuxu.datoveschranky.tinyDB.responseparsers;
 import cz.abclinuxu.datoveschranky.common.Status;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.StringHolder;
-import java.util.HashMap;
 import org.xml.sax.Attributes;
+
+import java.util.HashMap;
 
 /**
  * Tato třída slouží k parsování odpovědi webové služby, je to nástavba nad
  * SAX parserem, která umožnuje jednoduchou navigaci (viz metoda match) a podstatně
  * zjednodušuje čtení obsahu elementu.
- * 
+ * <p>
  * TODO: rozepsat dokumentaci k metodám.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public abstract class AbstractResponseParser implements ResponseParser {
@@ -20,7 +21,7 @@ public abstract class AbstractResponseParser implements ResponseParser {
     private static final boolean debug = false;
     private static final int MAX_DEPTH = 128;
     private static final String[] wanting = {"dmStatusCode", "dmStatusMessage"};
-    
+
     private String[] path = new String[MAX_DEPTH];
     private int pathIndex = 0;
     private HashMap<String, StringHolder> map = new HashMap<String, StringHolder>();
@@ -59,10 +60,10 @@ public abstract class AbstractResponseParser implements ResponseParser {
             return handle;
         }
     }
-    
+
     /**
      * Konec elementu, handle obsahuje OutputHandler s obsaheme elementu.
-     */ 
+     */
     public void endElement(String elName, OutputHolder handle) {
         if (debug) {
             System.err.println(dumpState());
@@ -73,15 +74,15 @@ public abstract class AbstractResponseParser implements ResponseParser {
         path[pathIndex] = null;
         pathIndex--;
     }
-    
+
     /**
-     *  Navigace x XML dokumentu, ověří shodu args proti vrcholu zásobníků.
-     *  TODO rozepsat.
-     */ 
+     * Navigace x XML dokumentu, ověří shodu args proti vrcholu zásobníků.
+     * TODO rozepsat.
+     */
     public boolean match(String... args) {
         if (pathIndex >= args.length) {
             int start = pathIndex - args.length;
-            for (int i = 0; i!= args.length; i++) {
+            for (int i = 0; i != args.length; i++) {
                 String a = path[start + i];
                 String b = args[i];
                 if (!"*".equals(b) && !a.equals(b)) {
@@ -93,10 +94,10 @@ public abstract class AbstractResponseParser implements ResponseParser {
             return false;
         }
     }
-    
+
     public String dumpState() {
         StringBuffer result = new StringBuffer("/");
-        for (int i = 0; i!= pathIndex; i++) {
+        for (int i = 0; i != pathIndex; i++) {
             result.append(path[i]);
             result.append("/");
         }

@@ -6,13 +6,12 @@
 package cz.abclinuxu.datoveschranky.common;
 
 /**
- *
  * @author xrosecky
  */
 public enum DataBoxEnvironment {
 
-    TEST ("ws1.czebox.cz", "ws1c.czebox.cz"),
-    PRODUCTION ("ws1.mojedatovaschranka.cz", "ws1c.mojedatovaschranka.cz");
+    TEST("ws1.czebox.cz", "ws1c.czebox.cz"),
+    PRODUCTION("ws1.mojedatovaschranka.cz", "ws1c.mojedatovaschranka.cz");
 
     private String basicURL;
     private String clientCertURL;

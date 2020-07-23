@@ -1,25 +1,25 @@
 package cz.abclinuxu.datoveschranky.impl;
 
+import cz.abclinuxu.datoveschranky.common.DataBoxException;
+import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
 import cz.abclinuxu.datoveschranky.common.entities.LegalTitle;
 import cz.abclinuxu.datoveschranky.common.entities.Message;
 import cz.abclinuxu.datoveschranky.common.entities.MessageType;
 import cz.abclinuxu.datoveschranky.common.entities.Validator;
-import cz.abclinuxu.datoveschranky.common.DataBoxException;
-import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxUploadService;
 import cz.abclinuxu.datoveschranky.ws.dm.DmOperationsPortType;
 import cz.abclinuxu.datoveschranky.ws.dm.TFilesArray;
 import cz.abclinuxu.datoveschranky.ws.dm.TFilesArray.DmFile;
-import cz.abclinuxu.datoveschranky.ws.dm.TStatus;
 import cz.abclinuxu.datoveschranky.ws.dm.TMessageCreateInput.DmEnvelope;
+import cz.abclinuxu.datoveschranky.ws.dm.TStatus;
+
+import javax.xml.ws.Holder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import javax.xml.ws.Holder;
 
 /**
- *
  * @author xrosecky
  */
 public class DataBoxUploadServiceImpl implements DataBoxUploadService {
@@ -30,6 +30,7 @@ public class DataBoxUploadServiceImpl implements DataBoxUploadService {
         this.dmOp = dmOp;
     }
 
+    @Override
     public void sendMessage(Message message) {
         Validator.assertValidMessageForSending(message);
         DmEnvelope envelope = new DmEnvelope();
@@ -39,11 +40,15 @@ public class DataBoxUploadServiceImpl implements DataBoxUploadService {
         // Process legal title
         LegalTitle legalTitle = message.getEnvelope().getLegalTitle();
         if (legalTitle != null) {
-            if (legalTitle.getLaw() != null) envelope.setDmLegalTitleLaw(BigInteger.valueOf(Long.parseLong(legalTitle.getLaw())));
-                envelope.setDmLegalTitlePar(legalTitle.getPar());
-                envelope.setDmLegalTitlePoint(legalTitle.getPoint());
-                envelope.setDmLegalTitleSect(legalTitle.getSect());
-                if (legalTitle.getYear() != null) envelope.setDmLegalTitleYear(BigInteger.valueOf(Long.parseLong(legalTitle.getYear())));
+            if (legalTitle.getLaw() != null) {
+                envelope.setDmLegalTitleLaw(BigInteger.valueOf(Long.parseLong(legalTitle.getLaw())));
+            }
+            envelope.setDmLegalTitlePar(legalTitle.getPar());
+            envelope.setDmLegalTitlePoint(legalTitle.getPoint());
+            envelope.setDmLegalTitleSect(legalTitle.getSect());
+            if (legalTitle.getYear() != null) {
+                envelope.setDmLegalTitleYear(BigInteger.valueOf(Long.parseLong(legalTitle.getYear())));
+            }
         }
 
         // To hands
@@ -51,12 +56,12 @@ public class DataBoxUploadServiceImpl implements DataBoxUploadService {
         envelope.setDmPersonalDelivery(message.getEnvelope().getPersonalDelivery());
 
         if (message.getEnvelope().getRecipientIdent() != null) {
-	    envelope.setDmRecipientIdent(message.getEnvelope().getRecipientIdent().getIdent());
-	    envelope.setDmRecipientRefNumber(message.getEnvelope().getRecipientIdent().getRefNumber());
-	}
+            envelope.setDmRecipientIdent(message.getEnvelope().getRecipientIdent().getIdent());
+            envelope.setDmRecipientRefNumber(message.getEnvelope().getRecipientIdent().getRefNumber());
+        }
         if (message.getEnvelope().getSenderIdent() != null) {
-	    envelope.setDmSenderIdent(message.getEnvelope().getSenderIdent().getIdent());
-	    envelope.setDmSenderRefNumber(message.getEnvelope().getSenderIdent().getRefNumber());
+            envelope.setDmSenderIdent(message.getEnvelope().getSenderIdent().getIdent());
+            envelope.setDmSenderRefNumber(message.getEnvelope().getSenderIdent().getRefNumber());
         }
         TFilesArray files = new TFilesArray();
         for (Attachment attachment : message.getAttachments()) {
@@ -73,8 +78,8 @@ public class DataBoxUploadServiceImpl implements DataBoxUploadService {
             file.setDmFileDescr(attachment.getDescription());
             files.getDmFile().add(file);
         }
-        Holder<String> messageID = new Holder<String>();
-        Holder<TStatus> status = new Holder<TStatus>();
+        Holder<String> messageID = new Holder<>();
+        Holder<TStatus> status = new Holder<>();
         if (message.getEnvelope().getDmType() != null) {
             envelope.setDmType(message.getEnvelope().getDmType());
         }

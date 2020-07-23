@@ -1,15 +1,16 @@
 package cz.abclinuxu.datoveschranky.tinyDB;
 
-import cz.abclinuxu.datoveschranky.common.Utils;
+import cz.abclinuxu.datoveschranky.common.Config;
 import cz.abclinuxu.datoveschranky.common.FileAttachmentStorer;
+import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.common.entities.Attachment;
 import cz.abclinuxu.datoveschranky.common.entities.DataBox;
 import cz.abclinuxu.datoveschranky.common.entities.Hash;
 import cz.abclinuxu.datoveschranky.common.entities.MessageEnvelope;
-import cz.abclinuxu.datoveschranky.common.Config;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxDownloadService;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxMessagesService;
 import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxServices;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
@@ -17,11 +18,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class Main {
-    
+
     public static void main(String[] args) throws Exception {
         if (args.length != 4) {
             String readMe = Utils.readResourceAsString(Main.class, "/readme.txt");
@@ -37,7 +37,7 @@ public class Main {
 
     public static void download(String type, String loginName, String password, String directory) throws Exception {
         File whereToPutFiles = new File(directory);
-        String url = type.equals("production")?Config.PRODUCTION_URL:Config.TEST_URL;
+        String url = type.equals("production") ? Config.PRODUCTION_URL : Config.TEST_URL;
         Config config = new Config(url);
         DataBoxServices services = DataBoxManager.login(config, loginName, password);
         DataBoxMessagesService messagesService = services.getDataBoxMessagesService();
@@ -51,7 +51,7 @@ public class Main {
         for (MessageEnvelope envelope : messages) {
             // uložíme celou podepsanou zprávu
             FileOutputStream fos = new FileOutputStream(new File(whereToPutFiles,
-                    envelope.getMessageID() + ".bin"));
+                envelope.getMessageID() + ".bin"));
             try {
                 downloadService.downloadSignedMessage(envelope, fos);
             } finally {
@@ -66,22 +66,22 @@ public class Main {
 
     public static void print(MessageEnvelope envelope, List<Attachment> attachments, Hash hash) {
         String sep = "=======================================";
-            sep = sep + sep;
-            System.out.println(sep);
-            DataBox sender = envelope.getSender();
-            System.out.println(String.format("Odesilatel: %s (%s)", sender.getIdentity(),
-                    sender.getAddress()));
-            System.out.println("Jednoznacne ID zpravy: " + envelope.getMessageID());
-            System.out.println("Predmet zpravy: " + envelope.getAnnotation());
-            System.out.println("Zprava byla prijata: " + envelope.getDeliveryTime().getTime());
-            System.out.println("Zprava byla akceptovana: " + envelope.getAcceptanceTime().getTime());
-            System.out.println("Hash zpravy je: " + hash);
-            System.out.println("Seznam priloh zpravy:");
-            for (Attachment attachment : attachments) {
-                System.out.println("       "+ attachment.getDescription() + " -> " +
-                        attachment.getContent().toString());
-            }
-            System.out.println(sep);
+        sep = sep + sep;
+        System.out.println(sep);
+        DataBox sender = envelope.getSender();
+        System.out.println(String.format("Odesilatel: %s (%s)", sender.getIdentity(),
+            sender.getAddress()));
+        System.out.println("Jednoznacne ID zpravy: " + envelope.getMessageID());
+        System.out.println("Predmet zpravy: " + envelope.getAnnotation());
+        System.out.println("Zprava byla prijata: " + envelope.getDeliveryTime().getTime());
+        System.out.println("Zprava byla akceptovana: " + envelope.getAcceptanceTime().getTime());
+        System.out.println("Hash zpravy je: " + hash);
+        System.out.println("Seznam priloh zpravy:");
+        for (Attachment attachment : attachments) {
+            System.out.println("       " + attachment.getDescription() + " -> " +
+                attachment.getContent().toString());
+        }
+        System.out.println(sep);
     }
 
 }

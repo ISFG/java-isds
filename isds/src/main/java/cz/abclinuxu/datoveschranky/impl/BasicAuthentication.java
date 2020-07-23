@@ -1,24 +1,20 @@
 package cz.abclinuxu.datoveschranky.impl;
 
 import cz.abclinuxu.datoveschranky.common.Config;
-import cz.abclinuxu.datoveschranky.common.DataBoxException;
-import java.security.KeyStore;
-import java.util.Map;
+
 import javax.xml.ws.BindingProvider;
+import java.util.Map;
 
 /**
- *
  * Autentizace
- *
  */
 public class BasicAuthentication extends Authentication {
 
-    protected String userName = null;
-    protected String password = null;
+    protected String userName;
+    protected String password;
 
     public BasicAuthentication(Config config, String userName, String password) {
         super(config);
-        KeyStore keyStore = config.getKeyStore();
         this.userName = userName;
         this.password = password;
     }
@@ -28,17 +24,15 @@ public class BasicAuthentication extends Authentication {
      * a heslem a při úspěšném přihlášení vrátí příslušnou instanci ISDSManageru
      * poskytující služby k této schránce.
      *
-     * @param userName   jméno uživatele
-     * @param password   heslo uživatele
-     * @throws DataBoxException   při přihlašování do DS došlo k chybě. Důvodem může
-     * být špatné heslo či uživatelské jméno.
-     *
+     * @param userName jméno uživatele
+     * @param password heslo uživatele
      */
-    public static Authentication login(Config config, String userName, String password) throws Exception {
+    public static Authentication login(Config config, String userName, String password) {
         Authentication auth = new BasicAuthentication(config, userName, password);
         return auth;
     }
 
+    @Override
     protected void configureServiceOverride(Map<String, Object> requestContext, String servicePostfix) {
         requestContext.put(BindingProvider.USERNAME_PROPERTY, userName);
         requestContext.put(BindingProvider.PASSWORD_PROPERTY, password);

@@ -6,7 +6,6 @@
 package cz.abclinuxu.datoveschranky.common.entities;
 
 /**
- *
  * @author xrosecky
  */
 public class DataBoxWithDetails extends DataBox {
@@ -39,11 +38,11 @@ public class DataBoxWithDetails extends DataBox {
 
     @Override
     public String toString() {
-	if (this.getIC() != null) {
-	    return "IC:" + this.getIC() + " " + super.toString();
-	} else {
-	    return super.toString();
-	}
+        if (this.getIC() != null) {
+            return "IC:" + this.getIC() + " " + super.toString();
+        } else {
+            return super.toString();
+        }
     }
 
 }

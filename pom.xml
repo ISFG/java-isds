@@ -1,203 +1,202 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>cz.abclinuxu.datoveschranky</groupId>
-  <artifactId>java-isds</artifactId>
-  <version>1.1.2</version>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cz.abclinuxu.datoveschranky</groupId>
+    <artifactId>java-isds</artifactId>
+    <version>1.1.2</version>
 
-  <name>JavaISDS</name>
-  <description>JavaISDS build POM</description>
-  <url>https://github.com/czgov/java-isds</url>
-  <packaging>pom</packaging>
-
-  <properties>
-    <!-- maven project settings -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
-
-    <maven-bundle-plugin-version>3.2.0</maven-bundle-plugin-version>
-    <bouncycastle-version>1.54</bouncycastle-version>
-
-    <!-- * -> detect imports and exports by maven bundle plugin -->
-    <osgi.import.default>*</osgi.import.default>
-    <osgi.export.default>cz.abclinuxu.datoveschranky.*</osgi.export.default>
-    <osgi.import>${osgi.import.default}</osgi.import>
-    <osgi.export>${osgi.export.default}</osgi.export>
-  </properties>
-
-  <licenses>
-    <license>
-      <name>BSD 3-Clause License</name>
-      <url>https://raw.githubusercontent.com/czgov/java-isds/master/license.txt</url>
-    </license>
-  </licenses>
-
-  <scm>
+    <name>JavaISDS</name>
+    <description>JavaISDS build POM</description>
     <url>https://github.com/czgov/java-isds</url>
-    <connection>scm:git:git://github.com/czgov/java-isds.git</connection>
-    <developerConnection>scm:git:git@github.com:czgov/java-isds.git</developerConnection>
-  </scm>
+    <packaging>pom</packaging>
 
-  <developers>
-    <developer>
-      <name>Vaclav Rosecky</name>
-    </developer>
-    <developer>
-      <name>Josef Ludvicek</name>
-    </developer>
-  </developers>
+    <properties>
+        <!-- maven project settings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
+        <maven-bundle-plugin-version>3.2.0</maven-bundle-plugin-version>
+        <bouncycastle-version>1.54</bouncycastle-version>
 
-  <dependencyManagement>
+        <!-- * -> detect imports and exports by maven bundle plugin -->
+        <osgi.import.default>*</osgi.import.default>
+        <osgi.export.default>cz.abclinuxu.datoveschranky.*</osgi.export.default>
+        <osgi.import>${osgi.import.default}</osgi.import>
+        <osgi.export>${osgi.export.default}</osgi.export>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/czgov/java-isds/master/license.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/czgov/java-isds</url>
+        <connection>scm:git:git://github.com/czgov/java-isds.git</connection>
+        <developerConnection>scm:git:git@github.com:czgov/java-isds.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Vaclav Rosecky</name>
+        </developer>
+        <developer>
+            <name>Josef Ludvicek</name>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.12</version>
-        <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <modules>
+        <module>isds-common</module>
+        <module>tiny-isds</module>
+        <module>isds-web-services</module>
+        <module>isds</module>
+        <module>message-viewer</module>
+        <module>examples</module>
+        <module>platforms</module>
+    </modules>
 
-  <modules>
-    <module>isds-common</module>
-    <module>tiny-isds</module>
-    <module>isds-web-services</module>
-    <module>isds</module>
-    <module>message-viewer</module>
-    <module>examples</module>
-	  <module>platforms</module>
-  </modules>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven-bundle-plugin-version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <!--<excludeDependencies>${camel.osgi.exclude.dependencies}</excludeDependencies>-->
-          <instructions>
-            <Bundle-Name>${project.name}</Bundle-Name>
-            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <!--<Bundle-Activator>${camel.osgi.activator}</Bundle-Activator>-->
-            <Import-Package>${osgi.import}</Import-Package>
-            <Export-Package>${osgi.export}</Export-Package>
-            <!--<DynamicImport-Package>${camel.osgi.dynamic}</DynamicImport-Package>-->
-            <!--<Private-Package>${camel.osgi.private.pkg}</Private-Package>-->
-            <!--<Import-Service>${camel.osgi.import.service}</Import-Service>-->
-            <!--<Export-Service>${camel.osgi.export.service}</Export-Service>-->
-            <!--<Require-Capability>${camel.osgi.require.capability}</Require-Capability>-->
-            <!--<Provide-Capability>${camel.osgi.provide.capability}</Provide-Capability>-->
-            <Implementation-Title>Java ISDS</Implementation-Title>
-            <Implementation-Version>${project.version}</Implementation-Version>
-            <!--<Karaf-Info>Camel;${project.artifactId}=${project.version}</Karaf-Info>-->
-            <!--<_versionpolicy>${camel.osgi.import.default.version}</_versionpolicy>-->
-            <!--<_failok>${camel.osgi.failok}</_failok>-->
-          </instructions>
-        </configuration>
-        <executions>
-          <execution>
-            <id>versions</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>cleanVersions</goal>
-            </goals>
-            <configuration>
-              <versions>
-                <camel.osgi.version.clean>${project.version}</camel.osgi.version.clean>
-              </versions>
-            </configuration>
-          </execution>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-  <profiles>
-    <profile>
-      <id>release</id>
-      <build>
+    <build>
         <plugins>
-          <plugin>
-            <!-- generate javadoc -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <author>true</author>
-              <defaultAuthor>Vaclav Rosecky</defaultAuthor>
-              <!-- current JavaDocs produce lot of warnings and fail the build on Java8 -->
-              <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <!-- generate source jar -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>2.2.1</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <!-- sign artifacts when releasing -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven-bundle-plugin-version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <!--<excludeDependencies>${camel.osgi.exclude.dependencies}</excludeDependencies>-->
+                    <instructions>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <!--<Bundle-Activator>${camel.osgi.activator}</Bundle-Activator>-->
+                        <Import-Package>${osgi.import}</Import-Package>
+                        <Export-Package>${osgi.export}</Export-Package>
+                        <!--<DynamicImport-Package>${camel.osgi.dynamic}</DynamicImport-Package>-->
+                        <!--<Private-Package>${camel.osgi.private.pkg}</Private-Package>-->
+                        <!--<Import-Service>${camel.osgi.import.service}</Import-Service>-->
+                        <!--<Export-Service>${camel.osgi.export.service}</Export-Service>-->
+                        <!--<Require-Capability>${camel.osgi.require.capability}</Require-Capability>-->
+                        <!--<Provide-Capability>${camel.osgi.provide.capability}</Provide-Capability>-->
+                        <Implementation-Title>Java ISDS</Implementation-Title>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <!--<Karaf-Info>Camel;${project.artifactId}=${project.version}</Karaf-Info>-->
+                        <!--<_versionpolicy>${camel.osgi.import.default.version}</_versionpolicy>-->
+                        <!--<_failok>${camel.osgi.failok}</_failok>-->
+                    </instructions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>versions</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>cleanVersions</goal>
+                        </goals>
+                        <configuration>
+                            <versions>
+                                <camel.osgi.version.clean>${project.version}</camel.osgi.version.clean>
+                            </versions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- generate javadoc -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <author>true</author>
+                            <defaultAuthor>Vaclav Rosecky</defaultAuthor>
+                            <!-- current JavaDocs produce lot of warnings and fail the build on Java8 -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <!-- generate source jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <!-- sign artifacts when releasing -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

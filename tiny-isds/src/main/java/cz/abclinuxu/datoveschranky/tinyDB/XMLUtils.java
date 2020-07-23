@@ -1,17 +1,16 @@
 package cz.abclinuxu.datoveschranky.tinyDB;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
- * These methods were put here from ISDSCommon. 
- * ISDS cannot contain them, since some platforms (Android) do not support XMLGregorianCalendar 
- * @author b00lean
+ * These methods were put here from ISDSCommon.
+ * ISDS cannot contain them, since some platforms (Android) do not support XMLGregorianCalendar
  *
+ * @author b00lean
  */
 public class XMLUtils {
 
@@ -22,7 +21,7 @@ public class XMLUtils {
             return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         } catch (DatatypeConfigurationException dtce) {
             throw new UnsupportedOperationException("Nemohu prevest "
-                    + "GregorianCalendar na XMLGregorianCalendar", dtce);
+                + "GregorianCalendar na XMLGregorianCalendar", dtce);
         }
     }
 
@@ -32,7 +31,7 @@ public class XMLUtils {
             return xmlDate.toGregorianCalendar();
         } catch (DatatypeConfigurationException dtce) {
             throw new UnsupportedOperationException("Nemohu prevest "
-                    + "GregorianCalendar na XMLGregorianCalendar", dtce);
+                + "GregorianCalendar na XMLGregorianCalendar", dtce);
         }
     }
 }

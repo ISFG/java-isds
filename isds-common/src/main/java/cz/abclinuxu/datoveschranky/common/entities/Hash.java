@@ -2,18 +2,18 @@ package cz.abclinuxu.datoveschranky.common.entities;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
- * 
  * Výsledek hašovací funkce (haš + algoritmus). Tato třída je neměnná.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
-import java.util.Arrays;
+
 public class Hash implements Serializable {
 
     private static final long serialVersionUID = 2L;
-    
+
     private final byte[] hash;
     private final String algorithm;
 
@@ -41,7 +41,7 @@ public class Hash implements Serializable {
     public byte[] getHash() {
         return hash;
     }
-    
+
     @Override
     public String toString() {
         return algorithm + " " + new BigInteger(1, hash).toString(16);

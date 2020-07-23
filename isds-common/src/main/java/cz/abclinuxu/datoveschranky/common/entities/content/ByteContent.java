@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 /**
  * Obsah přílohy uložený v bytovém poli v paměti.
- *  
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class ByteContent implements Content {

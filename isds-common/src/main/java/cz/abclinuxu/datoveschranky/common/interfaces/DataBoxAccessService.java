@@ -1,9 +1,9 @@
 package cz.abclinuxu.datoveschranky.common.interfaces;
 
-import java.util.GregorianCalendar;
-
 import cz.abclinuxu.datoveschranky.common.entities.OwnerInfo;
 import cz.abclinuxu.datoveschranky.common.entities.UserInfo;
+
+import java.util.GregorianCalendar;
 
 public interface DataBoxAccessService {
 
@@ -13,6 +13,7 @@ public interface DataBoxAccessService {
 
     /**
      * Vraci datum expirace hesla
+     *
      * @return
      */
     GregorianCalendar GetPasswordInfo();

@@ -1,5 +1,12 @@
 package cz.abclinuxu.datoveschranky;
 
+import cz.abclinuxu.datoveschranky.common.Config;
+import cz.abclinuxu.datoveschranky.common.DataBoxEnvironment;
+import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxServices;
+import cz.abclinuxu.datoveschranky.impl.Authentication;
+import cz.abclinuxu.datoveschranky.impl.BasicAuthentication;
+import cz.abclinuxu.datoveschranky.impl.ClientCertAuthentication;
+import cz.abclinuxu.datoveschranky.impl.DataBoxManager;
 import org.junit.Test;
 
 import java.io.File;
@@ -8,19 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import cz.abclinuxu.datoveschranky.common.Config;
-import cz.abclinuxu.datoveschranky.common.DataBoxEnvironment;
-import cz.abclinuxu.datoveschranky.common.interfaces.DataBoxServices;
-import cz.abclinuxu.datoveschranky.impl.Authentication;
-import cz.abclinuxu.datoveschranky.impl.BasicAuthentication;
-import cz.abclinuxu.datoveschranky.impl.ClientCertAuthentication;
-import cz.abclinuxu.datoveschranky.impl.DataBoxManager;
-
 /**
  * @author xrosecky
  */
 public class TestHelper {
 
+    // defined in pom.xml
+    private static final String CONFIG_PATH = System.getProperty("isds.config.path");
+    private final Config config = new Config(DataBoxEnvironment.TEST);
     /*
     public static final String login = "5e7mvf";
     public static final String passwd = "Ab123456b";
@@ -29,9 +31,6 @@ public class TestHelper {
     public static final Config config = new Config(DataBoxEnvironment.TEST);
      */
     private Properties properties = null;
-    private final Config config = new Config(DataBoxEnvironment.TEST);
-    // defined in pom.xml
-    private static final String CONFIG_PATH = System.getProperty("isds.config.path");
 
     public TestHelper() {
     }

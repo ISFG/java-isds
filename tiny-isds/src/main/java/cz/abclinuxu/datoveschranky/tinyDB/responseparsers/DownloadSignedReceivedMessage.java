@@ -3,13 +3,13 @@ package cz.abclinuxu.datoveschranky.tinyDB.responseparsers;
 import cz.abclinuxu.datoveschranky.common.Utils;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
 import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputStreamHolder;
-import java.io.Closeable;
-import java.io.OutputStream;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.xml.sax.Attributes;
 
+import java.io.Closeable;
+import java.io.OutputStream;
+
 /**
- *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class DownloadSignedReceivedMessage extends AbstractResponseParser {

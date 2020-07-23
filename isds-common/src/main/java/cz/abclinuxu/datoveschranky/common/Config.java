@@ -4,74 +4,65 @@ import java.io.Serializable;
 import java.security.KeyStore;
 
 /**
- *
  * Konfigurace připojení k ISDS.
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
  */
 public class Config implements Serializable {
 
-    private static final long serialVersionUID = 3L;
     /**
-     *  URL testovacího provozu
+     * URL testovacího provozu
      */
     @Deprecated
     public static final String TEST_URL = "ws1.czebox.cz"; // was ws1.czebox.cz
     /**
-     *  URL produkčního prostředí
+     * URL produkčního prostředí
      */
     @Deprecated
     public static final String PRODUCTION_URL = "ws1.mojedatovaschranka.cz"; // was ws1.mojedatovaschranka.cz
+    private static final long serialVersionUID = 3L;
     private final DataBoxEnvironment dataBoxEnvironment;
-    // private final String url;
-    private final KeyStore keyStore;
 
     /**
      * Vytvoří konfiguraci s daným URL a s KeyStore načteným z resources.
      * Konstruktor je určen pro testovací účely, pro realné nasazení použijte
      * vlastní keyStore.
-     * 
-     * @see Config#constructor((String, KeyStore) konstruktor Config.
-     * 
-     * @param servURL   URL služby (TEST_URL či PRODUCTION_URL)
-     * 
+     *
+     * @param servURL URL služby (TEST_URL či PRODUCTION_URL)
+     * @see Config#(String, KeyStore) konstruktor Config.
      */
     @Deprecated
     public Config(String servURL) {
         if (servURL.equals(TEST_URL)) {
-            this.dataBoxEnvironment = DataBoxEnvironment.TEST;
+            dataBoxEnvironment = DataBoxEnvironment.TEST;
         } else if (servURL.equals(PRODUCTION_URL)) {
-            this.dataBoxEnvironment = DataBoxEnvironment.PRODUCTION;
+            dataBoxEnvironment = DataBoxEnvironment.PRODUCTION;
         } else {
             throw new IllegalArgumentException("servURL");
         }
-        this.keyStore = Utils.createTrustStore();
     }
 
     public Config(DataBoxEnvironment dbe) {
-        this.dataBoxEnvironment = dbe;
-        this.keyStore = Utils.createTrustStore();
+        dataBoxEnvironment = dbe;
     }
 
     /**
      * Vytvoří konfiguraci s daným URL a příslušným klíči
-     * 
-     * @param servURL   URL služby (TEST_URL či PRODUCTION_URL)
-     * @param keys      instance třídy KeyStore, která obsahuje certifikáty
-     *    nutné pro přihlášení do ISDS, certifikáty, kterými je podepsána obálka
-     *    zprávy a certifikáty časových razítek.
-     * 
+     *
+     * @param servURL URL služby (TEST_URL či PRODUCTION_URL)
+     * @param keys    instance třídy KeyStore, která obsahuje certifikáty
+     *                nutné pro přihlášení do ISDS, certifikáty, kterými je podepsána obálka
+     *                zprávy a certifikáty časových razítek.
      */
     @Deprecated
     public Config(String servURL, KeyStore keys) {
         if (servURL.equals(TEST_URL)) {
-            this.dataBoxEnvironment = DataBoxEnvironment.TEST;
+            dataBoxEnvironment = DataBoxEnvironment.TEST;
         } else if (servURL.equals(PRODUCTION_URL)) {
-            this.dataBoxEnvironment = DataBoxEnvironment.PRODUCTION;
+            dataBoxEnvironment = DataBoxEnvironment.PRODUCTION;
         } else {
             throw new IllegalArgumentException("servURL");
         }
-        this.keyStore = keys;
     }
 
     public String getServiceURL() {
@@ -88,7 +79,4 @@ public class Config implements Serializable {
         return "login." + dataBoxEnvironment.basicURL();
     }
 
-    public KeyStore getKeyStore() {
-        return keyStore;
-    }
 }

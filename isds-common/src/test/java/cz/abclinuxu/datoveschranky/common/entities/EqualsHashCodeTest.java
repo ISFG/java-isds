@@ -1,9 +1,9 @@
 package cz.abclinuxu.datoveschranky.common.entities;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import org.junit.Test;
 
 /**
  * Created by jludvice on 21.9.16.
@@ -29,7 +29,7 @@ public class EqualsHashCodeTest {
     }
 
     @Test
-    public void nonEqualEnvelopes(){
+    public void nonEqualEnvelopes() {
         MessageEnvelope env1 = new MessageEnvelope();
         MessageEnvelope env2 = generateEnv("abc");
 
@@ -38,7 +38,7 @@ public class EqualsHashCodeTest {
     }
 
     @Test
-    public void equalMessage(){
+    public void equalMessage() {
         MessageEnvelope e = generateEnv("abc");
         Message m = new Message(e, null);
         Message m2 = new Message(e, null);

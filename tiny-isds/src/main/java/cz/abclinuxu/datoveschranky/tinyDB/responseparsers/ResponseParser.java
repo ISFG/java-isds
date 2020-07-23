@@ -4,11 +4,9 @@ import cz.abclinuxu.datoveschranky.tinyDB.holders.OutputHolder;
 import org.xml.sax.Attributes;
 
 /**
- *
  * Rozhraní, přijde refaktorovat
- * 
+ *
  * @author Vaclav Rosecky &lt;xrosecky 'at' gmail 'dot' com&gt;
- * 
  */
 public interface ResponseParser {
 
