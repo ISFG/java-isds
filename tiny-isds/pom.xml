@@ -6,7 +6,7 @@
     <parent>
         <artifactId>java-isds</artifactId>
         <groupId>cz.abclinuxu.datoveschranky</groupId>
-        <version>1.1.2</version>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>tiny-isds</artifactId>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>cz.abclinuxu.datoveschranky</groupId>
             <artifactId>isds-common</artifactId>
-            <version>1.1.2</version>
+            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
